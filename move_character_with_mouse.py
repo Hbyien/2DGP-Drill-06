@@ -20,11 +20,15 @@ def handle_events():
     for event in events:
         if event.type == SDL_QUIT:
             running = False
-        # fill here
-        elif event.type == SDL_MOUSEMOTION:
-            x, y = event.x, TUK_HEIGHT - 1 - event.y
+
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
+
+
+
+
+
+
 
 running = True
 frame = 0
@@ -35,18 +39,31 @@ x, y = TUK_WIDTH // 2, TUK_HEIGHT // 2
 hide_cursor()
 
 while running:
-    clear_canvas()
 
-    # fill here
-    tuk_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
-    character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
-    x = random.randint(50, 750)
-    y = random.randint(50,550)
-    cursor.draw(x, y)
-    update_canvas()
-    handle_events()
-    frame = (frame + 1) % 8
-    delay(0.05)
+    x1, y1 =x, y
+
+
+    cursorx, cursory = random.randint(50, 750), random.randint(50, 550)
+
+    for i in range(0, 100 + 1, 4):
+        t = i / 100
+        x = (1 - t) * x1 + t * cursorx
+        y = (1 - t) * y1 + t * cursory
+
+        clear_canvas()
+
+        # fill here
+        tuk_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
+        cursor.draw(cursorx, cursory)
+        if (cursorx - x1) >=0:
+            character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
+        else:
+            character.clip_composite_draw(frame * 100, 100 * 1, 100, 100,0 , 'h' ,x, y, 100, 100)
+
+        update_canvas()
+        handle_events()
+        frame = (frame + 1) % 8
+        delay(0.05)
 
 close_canvas()
 
